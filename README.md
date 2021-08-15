@@ -15,6 +15,12 @@ python3 -m pip install -r requirements.txt
 
 Note: Depending on your environment you may need to update your 'setuptools' to install dependencies: 'python3 -m pip install -U setuptools'.
 
+Run formatter with the following command:
+
+```console
+make format
+```
+
 Run lint with the following command:
 
 ```console
