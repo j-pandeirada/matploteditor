@@ -6,6 +6,10 @@ lint: clean
 	tox -e lint
 .PHONY: lint
 
+format: clean
+	tox -e format
+.PHONY: format
+
 main:
 	python3 tests/basic_test.py
 .PHONY: main
