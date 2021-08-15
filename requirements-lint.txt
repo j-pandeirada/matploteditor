@@ -1,0 +1,6 @@
+pylint
+pylint-junit
+pylint-pytest
+isort
+black
+flake8
