@@ -24,13 +24,18 @@ class EditorWindow(Ui_MainWindow):
         )
         self.boxStyleMenu.activated.connect(self.boxStyleMenu_handler)
         self.borderLineWidth.valueChanged.connect(self.borderLineWidth_handler)
+        self.xOffset.valueChanged.connect(self.xOffset_handler)
+        self.yOffset.valueChanged.connect(self.yOffset_handler)
 
         self._main.show()
 
     def bind_axes(self, ax):
         self._ax = ax
-        self._title = self._ax.set_title("")
+        #create an empty title instance with disabled
+        #automatic vertical positioning
+        self._title = self._ax.set_title("",y=1)
         self._title.set_bbox(dict(facecolor="none", edgecolor="none"))
+        self._title_init_pos = self._title.get_position()
 
     def add_line(self, line):
         self._line = line
@@ -41,6 +46,17 @@ class EditorWindow(Ui_MainWindow):
 
     def colorTextBox_handler(self):
         self._title.set_color(self.colorTextBox.text())
+        self._line.figure.canvas.draw()
+    
+    def xOffset_handler(self):
+        xofs = float(self.xOffset.value())
+        self._title.set_x(self._title_init_pos[0]+xofs/1000)
+        self._line.figure.canvas.draw()
+    
+    def yOffset_handler(self):
+        yofs = float(self.yOffset.value())
+        self._title.set_y(self._title_init_pos[1]+yofs/1000)
+        print(self._title.get_position())
         self._line.figure.canvas.draw()
 
     def bgColorTextBox_handler(self):
