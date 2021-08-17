@@ -7,9 +7,9 @@ The GUI plot editor we all deserved for Matplotlib.
 Please install all the requirements with your preferred python virtual environment with the following bash command:
 
 ```console
-virtualenv venv
-source venv/bin/activate
+python3 -m venv venv
 echo "export PYTHONPATH="${PYTHONPATH}:$PWD/src/"" >> ./venv/bin/activate
+source venv/bin/activate
 python3 -m pip install -r requirements.txt
 ```
 
