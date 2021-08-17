@@ -41,6 +41,8 @@ class EditorWindow(Ui_MainWindow):
         self._line = line
 
     def titleTextBox_handler(self):
+        #this is a string literal
+        "aiaiaiaia\nfunfam"
         self._title.set_text(self.titleTextBox.text())
         self._line.figure.canvas.draw()
 
