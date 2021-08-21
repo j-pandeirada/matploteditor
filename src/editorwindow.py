@@ -1,5 +1,4 @@
-from PyQt5 import QtWidgets
-
+from PyQt5.QtWidgets import QMainWindow, QColorDialog
 from editorwindowui import Ui_MainWindow
 
 
@@ -7,7 +6,7 @@ class EditorWindow(Ui_MainWindow):
     def __init__(self):
         # super().__init__()
         # self._main = QtWidgets.QWidget()
-        self._main = QtWidgets.QMainWindow()
+        self._main = QMainWindow()
         self.setupUi(self._main)
         self.titleTextBox.returnPressed.connect(self.titleTextBox_handler)
         self.titleFontSize.valueChanged.connect(self.titleFontSize_handler)
@@ -26,6 +25,9 @@ class EditorWindow(Ui_MainWindow):
         self.borderLineWidth.valueChanged.connect(self.borderLineWidth_handler)
         self.xOffset.valueChanged.connect(self.xOffset_handler)
         self.yOffset.valueChanged.connect(self.yOffset_handler)
+        self.titleColorPicker.clicked.connect(self.titleColorPicker_handler)
+        self.bgColorPicker.clicked.connect(self.bgColorPicker_handler)
+        self.borderColorPicker.clicked.connect(self.borderColorPicker_handler)
 
         self._main.show()
 
@@ -51,7 +53,14 @@ class EditorWindow(Ui_MainWindow):
         self._line.figure.canvas.draw()
 
     def colorTextBox_handler(self):
-        self._title.set_color(self.colorTextBox.text())
+        color= self.colorTextBox.text()
+        self._title.set_color(color)
+        self._line.figure.canvas.draw()
+    
+    def titleColorPicker_handler(self):
+        color = QColorDialog.getColor()
+        self.colorTextBox.setText(color.name())
+        self._title.set_color(color.name())
         self._line.figure.canvas.draw()
     
     def xOffset_handler(self):
@@ -68,10 +77,22 @@ class EditorWindow(Ui_MainWindow):
         color = self.bgColorTextBox.text()
         self._title._bbox_patch.update(dict(facecolor=color))
         self._line.figure.canvas.draw()
+    
+    def bgColorPicker_handler(self):
+        color = QColorDialog.getColor()
+        self.bgColorTextBox.setText(color.name())
+        self._title._bbox_patch.update(dict(facecolor=color.name()))
+        self._line.figure.canvas.draw()
 
     def borderColorTextBox_handler(self):
         color = self.borderColorTextBox.text()
         self._title._bbox_patch.update(dict(edgecolor=color))
+        self._line.figure.canvas.draw()
+    
+    def borderColorPicker_handler(self):
+        color = QColorDialog.getColor()
+        self.borderColorTextBox.setText(color.name())
+        self._title._bbox_patch.update(dict(edgecolor=color.name()))
         self._line.figure.canvas.draw()
 
     def titleFontSize_handler(self):
