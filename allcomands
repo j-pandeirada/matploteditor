@@ -1,5 +1,0 @@
-- change figure background color and transparency
-self._ax.patch.set_facecolor('#ababab')
-
-- change title text box background color:
-'backgroundcolor':'black' inside fontdict
