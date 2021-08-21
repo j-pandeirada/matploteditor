@@ -10,6 +10,10 @@ format: clean
 	tox -e format
 .PHONY: format
 
+createui:
+	pyuic5 -x src/editor.ui -o src/editorwindowui.py
+.PHONY: createui
+
 main:
 	python3 tests/basic_test.py
 .PHONY: main
