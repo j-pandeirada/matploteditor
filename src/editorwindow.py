@@ -41,9 +41,13 @@ class EditorWindow(Ui_MainWindow):
         self._line = line
 
     def titleTextBox_handler(self):
-        #this is a string literal
-        "aiaiaiaia\nfunfam"
-        self._title.set_text(self.titleTextBox.text())
+        text = self.titleTextBox.text()
+        # we need to first encode the string to bytes
+        text = text.encode('utf-8')
+        # and then decode with unicode_escape
+        # to properly in order for the linebreaks to work
+        text = text.decode('unicode_escape')
+        self._title.set_text(text)
         self._line.figure.canvas.draw()
 
     def colorTextBox_handler(self):
@@ -58,7 +62,6 @@ class EditorWindow(Ui_MainWindow):
     def yOffset_handler(self):
         yofs = float(self.yOffset.value())
         self._title.set_y(self._title_init_pos[1]+yofs/1000)
-        print(self._title.get_position())
         self._line.figure.canvas.draw()
 
     def bgColorTextBox_handler(self):
