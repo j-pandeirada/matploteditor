@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QMainWindow, QColorDialog
+from PyQt5.QtGui import QIcon
 from editorwindowui import Ui_MainWindow
 
 
@@ -8,17 +9,18 @@ class EditorWindow(Ui_MainWindow):
         # self._main = QtWidgets.QWidget()
         self._main = QMainWindow()
         self.setupUi(self._main)
-        self.titleTextBox.returnPressed.connect(self.titleTextBox_handler)
+        
+        self.titleTextBox.textChanged.connect(self.titleTextBox_handler)
         self.titleFontSize.valueChanged.connect(self.titleFontSize_handler)
         self.titleFontMenu.activated.connect(self.titleFontMenu_handler)
         self.alignmentMenu.activated.connect(self.alignmentMenu_handler)
         self.fontStyleMenu.activated.connect(self.fontStyleMenu_handler)
         self.fontWeightMenu.activated.connect(self.fontWeightMenu_handler)
-        self.colorTextBox.returnPressed.connect(self.colorTextBox_handler)
+        self.colorTextBox.textEdited.connect(self.colorTextBox_handler)
         self.rotationAngle.valueChanged.connect(self.rotationAngle_handler)
         self.borderlineStyle.activated.connect(self.borderlineStyle_handler)
-        self.bgColorTextBox.returnPressed.connect(self.bgColorTextBox_handler)
-        self.borderColorTextBox.returnPressed.connect(
+        self.bgColorTextBox.textEdited.connect(self.bgColorTextBox_handler)
+        self.borderColorTextBox.textEdited.connect(
             self.borderColorTextBox_handler
         )
         self.boxStyleMenu.activated.connect(self.boxStyleMenu_handler)
@@ -43,18 +45,28 @@ class EditorWindow(Ui_MainWindow):
         self._line = line
 
     def titleTextBox_handler(self):
-        text = self.titleTextBox.text()
-        # we need to first encode the string to bytes
-        text = text.encode('utf-8')
-        # and then decode with unicode_escape
-        # to properly in order for the linebreaks to work
-        text = text.decode('unicode_escape')
-        self._title.set_text(text)
-        self._line.figure.canvas.draw()
+        try:
+            text = self.titleTextBox.toPlainText()
+            # we need to first encode the string to bytes
+            text = text.encode('utf-8')
+            # and then decode with unicode_escape
+            # to properly in order for the linebreaks to work
+            text = text.decode('utf-8')
+            # decode to utf-8 to have accented chars
+            # decode with uniocode_escape to have \n
+            self._title.set_text(text)
+            self._line.figure.canvas.draw()
+        except:
+            pass
 
     def colorTextBox_handler(self):
-        color= self.colorTextBox.text()
-        self._title.set_color(color)
+        try:
+            color= self.colorTextBox.text()
+            self._title.set_color(color)
+        except:
+            color = 'black'
+            self._title.set_color(color)
+        
         self._line.figure.canvas.draw()
     
     def titleColorPicker_handler(self):
@@ -74,8 +86,12 @@ class EditorWindow(Ui_MainWindow):
         self._line.figure.canvas.draw()
 
     def bgColorTextBox_handler(self):
-        color = self.bgColorTextBox.text()
-        self._title._bbox_patch.update(dict(facecolor=color))
+        try:
+            color = self.bgColorTextBox.text()
+            self._title._bbox_patch.update(dict(facecolor=color))
+        except:
+            self._title._bbox_patch.update(dict(facecolor='None'))
+        
         self._line.figure.canvas.draw()
     
     def bgColorPicker_handler(self):
@@ -85,10 +101,14 @@ class EditorWindow(Ui_MainWindow):
         self._line.figure.canvas.draw()
 
     def borderColorTextBox_handler(self):
-        color = self.borderColorTextBox.text()
-        self._title._bbox_patch.update(dict(edgecolor=color))
+        try:
+            color = self.borderColorTextBox.text()
+            self._title._bbox_patch.update(dict(edgecolor=color))
+        except:
+            self._title._bbox_patch.update(dict(edgecolor='None'))
+
         self._line.figure.canvas.draw()
-    
+
     def borderColorPicker_handler(self):
         color = QColorDialog.getColor()
         self.borderColorTextBox.setText(color.name())
